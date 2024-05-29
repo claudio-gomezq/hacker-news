@@ -1,4 +1,4 @@
-package com.cgomezq.hackernews.ui.theme
+package com.cgomezq.hackernews.common.ui.theme
 
 import android.app.Activity
 import android.os.Build
