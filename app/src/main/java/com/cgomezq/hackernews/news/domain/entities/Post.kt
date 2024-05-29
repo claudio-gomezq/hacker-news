@@ -1,11 +1,11 @@
 package com.cgomezq.hackernews.news.domain.entities
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class Post(
     val id: Int,
     val title: String,
-    val date: LocalDate,
+    val date: LocalDateTime,
     val authorName: String,
     val link: String
 )

@@ -12,8 +12,8 @@ data class PostModel(
     val author: String?,
     @JsonNames("story_title", "title")
     val storyTitle: String?,
-    @SerialName("created_at")
-    val createdAt: String?,
+    @SerialName("created_at_i")
+    val createdAt: Long?,
     @JsonNames("story_url", "url")
     val storyUrl: String?
 )
