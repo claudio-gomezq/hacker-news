@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.cgomezq.hackernews.R
 import com.cgomezq.hackernews.common.ui.theme.HackerNewsTheme
+import com.cgomezq.hackernews.news.presentation.logic.NewsIntent
 import com.cgomezq.hackernews.news.presentation.logic.NewsState
 import com.cgomezq.hackernews.news.presentation.ui.components.PostList
 
@@ -19,7 +20,8 @@ import com.cgomezq.hackernews.news.presentation.ui.components.PostList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(
-    state: NewsState
+    state: NewsState,
+    emitIntent: (NewsIntent) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -31,7 +33,11 @@ fun NewsScreen(
         Box(modifier = Modifier.padding(it)) {
             when (state) {
                 NewsState.Loading -> Text(text = "Loading")
-                is NewsState.ShowingNews -> PostList(posts = state.posts)
+                is NewsState.ShowingNews ->
+                    PostList(
+                        state = state,
+                        emitIntent = emitIntent
+                    )
             }
         }
     }
@@ -39,8 +45,8 @@ fun NewsScreen(
 
 @Preview
 @Composable
-fun NewsScreenPreview(){
+fun NewsScreenPreview() {
     HackerNewsTheme {
-        NewsScreen(state = NewsState.Loading)
+        NewsScreen(state = NewsState.Loading, emitIntent = {})
     }
 }

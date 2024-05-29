@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
             HackerNewsTheme {
                 val viewmodel: NewsViewModel = viewModel()
                 val state = viewmodel.state.collectAsStateWithLifecycle().value
-                NewsScreen(state)
+                NewsScreen(state, viewmodel::emitIntent)
             }
         }
     }
