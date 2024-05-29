@@ -1,11 +1,13 @@
 package com.cgomezq.hackernews.news.presentation.ui.components
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.cgomezq.hackernews.news.presentation.logic.NewsIntent
 import com.cgomezq.hackernews.news.presentation.logic.NewsState
 
@@ -22,9 +24,20 @@ fun PostList(
         }
     ) {
         LazyColumn {
-            items(state.posts) {
-                PostItem(post = it, onClick = {})
-                HorizontalDivider()
+            items(items = state.posts, key = { it.id }) {
+                SwipeToDismissItem(
+                    modifier = Modifier.animateItem(),
+                    onDismissed = { emitIntent(NewsIntent.DeletePost(it)) },
+                    content = {
+                        Column {
+                            PostItem(
+                                post = it,
+                                onClick = {}
+                            )
+                            HorizontalDivider()
+                        }
+                    }
+                )
             }
         }
     }

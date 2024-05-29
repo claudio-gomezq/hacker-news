@@ -3,4 +3,5 @@
     <string name="app_label">Hacker News</string>
     <string name="yesterday">Yesterday</string>
     <string name="author_date">%s - %s</string>
+    <string name="delete">Delete</string>
 </resources>

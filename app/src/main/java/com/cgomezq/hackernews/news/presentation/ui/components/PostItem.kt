@@ -1,11 +1,13 @@
 package com.cgomezq.hackernews.news.presentation.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,8 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cgomezq.hackernews.R
-import com.cgomezq.hackernews.common.ui.theme.HackerNewsTheme
 import com.cgomezq.hackernews.common.formatter.toTimesAgo
+import com.cgomezq.hackernews.common.ui.theme.HackerNewsTheme
 import com.cgomezq.hackernews.news.domain.entities.Post
 import java.time.LocalDateTime
 
@@ -30,7 +32,9 @@ fun PostItem(
     Column(
         modifier = modifier
             .clickable { onClick(post) }
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 16.dp)
+            .fillMaxWidth()
     ) {
         Text(text = post.title)
         Spacer(modifier = modifier.height(8.dp))

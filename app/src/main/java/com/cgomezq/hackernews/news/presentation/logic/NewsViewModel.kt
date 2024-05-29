@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cgomezq.hackernews.common.ui.extensions.transformFold
+import com.cgomezq.hackernews.news.domain.usecases.DeletePost
 import com.cgomezq.hackernews.news.domain.usecases.GetPosts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val getPosts: GetPosts
+    private val getPosts: GetPosts,
+    private val deletePost: DeletePost
 ) : ViewModel() {
 
     private val intents = MutableSharedFlow<NewsIntent>()
@@ -43,7 +45,14 @@ class NewsViewModel @Inject constructor(
                 }.onFailure {
                 }
 
-                is NewsIntent.DeletePost -> {
+                is NewsIntent.DeletePost -> if (previousState is NewsState.ShowingNews) runCatching {
+                    deletePost(intent.post)
+                    emit(
+                        previousState.copy(
+                            posts = previousState.posts.filter { intent.post.id != it.id }
+                        )
+                    )
+                }.onFailure {
                 }
             }
         }
