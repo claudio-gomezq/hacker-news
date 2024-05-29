@@ -4,23 +4,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
-import com.cgomezq.hackernews.ui.theme.HackerNewsTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cgomezq.hackernews.common.ui.theme.HackerNewsTheme
+import com.cgomezq.hackernews.news.presentation.logic.NewsViewModel
+import com.cgomezq.hackernews.news.presentation.ui.NewsScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             HackerNewsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(modifier = Modifier.padding(innerPadding)) {
-                    }
-                }
+                val viewmodel: NewsViewModel = viewModel()
+                val state = viewmodel.state.collectAsStateWithLifecycle().value
+                NewsScreen(state)
             }
         }
     }
