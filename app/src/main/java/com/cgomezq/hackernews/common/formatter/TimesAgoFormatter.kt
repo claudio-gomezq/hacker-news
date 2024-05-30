@@ -1,6 +1,6 @@
 package com.cgomezq.hackernews.common.formatter
 
-import android.icu.text.DecimalFormat
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -12,12 +12,12 @@ fun LocalDateTime.toTimesAgo(yesterdayText: String): String {
     val yesterday = today.minusDays(1)
     val differenceInDays = dateTime.until(today, ChronoUnit.DAYS)
     return when {
-        today.toLocalDate() == dateTime.toLocalDate() ->{
+        today.toLocalDate() == dateTime.toLocalDate() -> {
             val differenceInMinutes = dateTime.until(today, ChronoUnit.MINUTES)
-            return if (differenceInMinutes > 60){
+            return if (differenceInMinutes > 60) {
                 val hours = differenceInMinutes.toFloat() / 60
                 "${format.format(hours)}h"
-            } else{
+            } else {
                 "${differenceInMinutes}m"
             }
         }
