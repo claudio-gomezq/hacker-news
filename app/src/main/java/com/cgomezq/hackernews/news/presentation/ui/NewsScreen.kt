@@ -1,12 +1,15 @@
 package com.cgomezq.hackernews.news.presentation.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,7 +24,8 @@ import com.cgomezq.hackernews.news.presentation.ui.components.PostList
 @Composable
 fun NewsScreen(
     state: NewsState,
-    emitIntent: (NewsIntent) -> Unit
+    emitIntent: (NewsIntent) -> Unit,
+    navigateToPost: (title: String, link: String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -30,13 +34,25 @@ fun NewsScreen(
             )
         }
     ) {
-        Box(modifier = Modifier.padding(it)) {
+        Box(
+            modifier = Modifier.fillMaxSize().padding(it)
+        ) {
             when (state) {
-                NewsState.Loading -> Text(text = "Loading")
+                NewsState.Loading ->
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+
                 is NewsState.ShowingNews ->
                     PostList(
                         state = state,
-                        emitIntent = emitIntent
+                        emitIntent = emitIntent,
+                        onClickPost = { post ->
+                            if (post.link.isNotEmpty()) {
+                                navigateToPost(post.title, post.link)
+                            }
+                        }
                     )
             }
         }
@@ -47,6 +63,6 @@ fun NewsScreen(
 @Composable
 fun NewsScreenPreview() {
     HackerNewsTheme {
-        NewsScreen(state = NewsState.Loading, emitIntent = {})
+        NewsScreen(state = NewsState.Loading, emitIntent = {}, navigateToPost = { _, _ -> })
     }
 }
