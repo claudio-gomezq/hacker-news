@@ -20,7 +20,7 @@ class ActualPostRepository @Inject constructor(
     override suspend fun getPosts(): List<Post> {
         if (isNetworkAvailable.get()) {
             val response = service.getNews(query = "mobile")
-            val body = response.getBodyOrError()
+            val body = response.getBodyOrError(message = "Error getting response")
             val localPost = with(mappings) {
                 body.hits.toPostsLocalModel()
             }

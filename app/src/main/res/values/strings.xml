@@ -9,4 +9,5 @@
     <string name="error_refreshing_page">Error refreshing the page</string>
     <string name="error_deleting_the_post">An error has occurred  while deleting the post</string>
     <string name="error_loading_post_page">Error at loading post page</string>
+    <string name="no_news_founds">No news founds</string>
 </resources>

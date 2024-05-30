@@ -2,6 +2,7 @@ package com.cgomezq.hackernews.news.presentation.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
@@ -22,7 +23,12 @@ fun PostList(
         isRefreshing = state.isRefreshing,
         onRefresh = { emitIntent(NewsIntent.RefreshNews) }
     ) {
-        LazyColumn {
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            if (state.posts.isEmpty()) {
+                item {
+                    NotFoundNewsText()
+                }
+            }
             items(items = state.posts, key = { it.id }) {
                 SwipeToDismissItem(
                     modifier = Modifier.animateItemPlacement(),
