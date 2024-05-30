@@ -1,6 +1,8 @@
 package com.cgomezq.hackernews
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -8,9 +10,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.cgomezq.hackernews.news.presentation.logic.NewsEffect
 import com.cgomezq.hackernews.news.presentation.logic.NewsViewModel
-import com.cgomezq.hackernews.news.presentation.ui.NewsScreen
-import com.cgomezq.hackernews.news.presentation.ui.PostScreen
+import com.cgomezq.hackernews.news.presentation.ui.effects.NewsEffects
+import com.cgomezq.hackernews.news.presentation.ui.screens.NewsScreen
+import com.cgomezq.hackernews.news.presentation.ui.screens.PostScreen
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -24,14 +28,24 @@ fun MainNavHost(
     ) {
         composable(route = "news") {
             val viewmodel: NewsViewModel = hiltViewModel()
-            val state = viewmodel.state.collectAsStateWithLifecycle().value
+            val state = viewmodel.uiState.collectAsStateWithLifecycle().value
+            val snackBarHostState = remember { SnackbarHostState() }
             NewsScreen(
                 state = state,
+                snackBarHostState = snackBarHostState,
                 emitIntent = viewmodel::emitIntent,
                 navigateToPost = { title, link ->
-                    val encodedUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
-                    navController.navigate("post/${encodedUrl}/${title}")
+                    if (link.isNotEmpty()) {
+                        val encodedUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
+                        navController.navigate("post/${encodedUrl}/${title}")
+                    } else {
+                        viewmodel.emitEffect(NewsEffect.LoadingPostError)
+                    }
                 }
+            )
+            NewsEffects(
+                newsEffect = viewmodel.uiEffect,
+                snackBarHostState = snackBarHostState
             )
         }
         composable(

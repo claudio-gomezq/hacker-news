@@ -1,6 +1,5 @@
 package com.cgomezq.hackernews.news.presentation.logic
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cgomezq.hackernews.common.ui.extensions.transformFold
@@ -10,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -22,8 +22,10 @@ class NewsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val intents = MutableSharedFlow<NewsIntent>()
+    private val effects = MutableSharedFlow<NewsEffect>()
 
-    val state: StateFlow<NewsState> = intents
+    val uiEffect = effects.asSharedFlow()
+    val uiState: StateFlow<NewsState> = intents
         .onSubscription { emit(NewsIntent.GetNews) }
         .transformFold<NewsIntent, NewsState>(
             initial = NewsState.Loading,
@@ -34,8 +36,7 @@ class NewsViewModel @Inject constructor(
                     val posts = getPosts()
                     emit(NewsState.ShowingNews(isRefreshing = false, posts = posts))
                 }.onFailure {
-                    Log.e("error", it.localizedMessage ?: "")
-                    // TODO handle error
+                    emit(NewsState.ShowingError)
                 }
 
                 NewsIntent.RefreshNews -> if (previousState is NewsState.ShowingNews) runCatching {
@@ -43,6 +44,7 @@ class NewsViewModel @Inject constructor(
                     val posts = getPosts()
                     emit(previousState.copy(posts = posts, isRefreshing = false))
                 }.onFailure {
+                    effects.emit(NewsEffect.RefreshingError)
                 }
 
                 is NewsIntent.DeletePost -> if (previousState is NewsState.ShowingNews) runCatching {
@@ -53,6 +55,7 @@ class NewsViewModel @Inject constructor(
                         )
                     )
                 }.onFailure {
+                    effects.emit(NewsEffect.DeletingError)
                 }
             }
         }
@@ -66,6 +69,12 @@ class NewsViewModel @Inject constructor(
     fun emitIntent(intent: NewsIntent) {
         viewModelScope.launch {
             intents.emit(intent)
+        }
+    }
+
+    fun emitEffect(effect: NewsEffect) {
+        viewModelScope.launch {
+            effects.emit(effect)
         }
     }
 }

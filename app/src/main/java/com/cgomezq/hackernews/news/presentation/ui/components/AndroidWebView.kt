@@ -1,5 +1,6 @@
 package com.cgomezq.hackernews.news.presentation.ui.components
 
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -7,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun AndroidWebView(
     modifier: Modifier = Modifier,
@@ -26,6 +28,7 @@ fun AndroidWebView(
                         onPageLoaded()
                     }
                 }
+                settings.javaScriptEnabled = true
             }
         },
         update = {

@@ -28,7 +28,7 @@ fun PostItem(
     post: Post,
     onClick: (Post) -> Unit
 ) {
-    val timeAgo = post.date.toTimesAgo(stringResource(id = R.string.yesterday))
+    val timeAgo = post.date.toTimesAgo(yesterdayText = stringResource(id = R.string.yesterday))
     Column(
         modifier = modifier
             .clickable { onClick(post) }

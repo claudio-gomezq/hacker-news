@@ -30,6 +30,9 @@ fun SwipeToDismissItem(
         if (dismissState.currentValue == SwipeToDismissBoxValue.EndToStart) {
             onDismissed()
         }
+        if (dismissState.currentValue == SwipeToDismissBoxValue.Settled) {
+            dismissState.reset()
+        }
     }
     SwipeToDismissBox(
         modifier = modifier,

@@ -4,4 +4,9 @@
     <string name="yesterday">Yesterday</string>
     <string name="author_date">%s - %s</string>
     <string name="delete">Delete</string>
+    <string name="try_again">Try Again</string>
+    <string name="error_loading_the_page">Error loading the page</string>
+    <string name="error_refreshing_page">Error refreshing the page</string>
+    <string name="error_deleting_the_post">An error has occurred  while deleting the post</string>
+    <string name="error_loading_post_page">Error at loading post page</string>
 </resources>
