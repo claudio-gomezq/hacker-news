@@ -26,9 +26,8 @@ class NetworkModule {
 
     @Provides
     @NetworkAvailable
-    fun providesIsNetWorkAvailable(
-        @ApplicationContext context: Context
-    ): Boolean = context.isNetworkAvailable()
+    fun providesIsNetWorkAvailable(@ApplicationContext context: Context): Boolean =
+        context.isNetworkAvailable()
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
@@ -39,9 +38,7 @@ class NetworkModule {
         }
 
     @Provides
-    fun provideConverterFactory(
-        json: Json
-    ): Converter.Factory =
+    fun provideConverterFactory(json: Json): Converter.Factory =
         json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
 
     @Provides

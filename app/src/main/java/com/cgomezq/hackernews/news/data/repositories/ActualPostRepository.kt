@@ -16,8 +16,9 @@ class ActualPostRepository @Inject constructor(
     private val postDao: PostDao,
     private val mappings: PostMappings
 ) : PostRepository {
+
     override suspend fun getPosts(): List<Post> {
-        if (isNetworkAvailable.get()){
+        if (isNetworkAvailable.get()) {
             val response = service.getNews(query = "mobile")
             val body = response.getBodyOrError()
             val localPost = with(mappings) {
@@ -32,7 +33,8 @@ class ActualPostRepository @Inject constructor(
     }
 
     override suspend fun deletePost(post: Post) {
-
+        val localPost = postDao.getPost(post.id.toString())
+        postDao.updatePost(localPost.copy(isDeleted = true))
     }
 
 }

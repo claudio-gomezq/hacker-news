@@ -12,9 +12,12 @@ interface PostDao {
     @Query("select * from post where is_deleted=0")
     suspend fun getAll(): List<PostLocalModel>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("select * from post where id=:id")
+    suspend fun getPost(id: String): PostLocalModel
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(vararg posts: PostLocalModel)
 
     @Update
-    fun updatePost(post: PostLocalModel)
+    suspend fun updatePost(post: PostLocalModel)
 }
