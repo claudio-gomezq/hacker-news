@@ -1,5 +1,6 @@
 package com.cgomezq.hackernews.news.data.mappings
 
+import com.cgomezq.hackernews.news.data.models.PostLocalModel
 import com.cgomezq.hackernews.news.data.models.PostModel
 import com.cgomezq.hackernews.news.domain.entities.Post
 import java.time.Instant
@@ -9,13 +10,23 @@ import javax.inject.Inject
 
 class PostMappings @Inject constructor() {
 
-    fun List<PostModel>.toPosts(): List<Post> = map {
+    fun List<PostLocalModel>.toPosts(): List<Post> = map {
         Post(
-            id = it.objectID?.toInt() ?: 0,
+            id = it.id.toInt(),
             title = it.storyTitle ?: "",
             date = it.createdAt?.toLocalDateTime() ?: LocalDateTime.now(),
             authorName = it.author ?: "",
             link = it.storyUrl ?: ""
+        )
+    }
+
+    fun List<PostModel>.toPostsLocalModel(): List<PostLocalModel> = map {
+        PostLocalModel(
+            id = it.objectID ?: "",
+            storyTitle = it.storyTitle,
+            createdAt = it.createdAt,
+            author = it.author,
+            storyUrl = it.storyUrl,
         )
     }
 
